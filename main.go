@@ -14,12 +14,15 @@ import (
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
 
-	helloHandler := handlers.NewHello(logger)
-	goodbyeHandler := handlers.NewGoodbye(logger)
+	// TODO: Clear unrequired handlers
+	// helloHandler := handlers.NewHello(logger)
+	// goodbyeHandler := handlers.NewGoodbye(logger)
+	productsHandler := handlers.NewProducts(logger)
 
 	serveMux := http.NewServeMux()
-	serveMux.Handle("/", helloHandler)
-	serveMux.Handle("/goodbye", goodbyeHandler)
+	// serveMux.Handle("/", helloHandler)
+	// serveMux.Handle("/goodbye", goodbyeHandler)
+	serveMux.Handle("/", productsHandler)
 
 	// Similar http ListenAndServe, the method by default
 	// uses an already created object. Here we make the server
