@@ -8,21 +8,29 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/shubhamgoel2525/working/handlers"
 )
 
 func main() {
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
 
-	// TODO: Clear unrequired handlers
-	// helloHandler := handlers.NewHello(logger)
-	// goodbyeHandler := handlers.NewGoodbye(logger)
 	productsHandler := handlers.NewProducts(logger)
 
-	serveMux := http.NewServeMux()
-	// serveMux.Handle("/", helloHandler)
-	// serveMux.Handle("/goodbye", goodbyeHandler)
-	serveMux.Handle("/", productsHandler)
+	serveMux := mux.NewRouter()
+
+	// Subrouter registers routes sprcifically for parent
+	// router
+	getRouter := serveMux.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/", productsHandler.GetProducts)
+
+	putRouter := serveMux.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", productsHandler.UpdateProduct)
+	putRouter.Use(productsHandler.MiddlewareProductValidation)
+
+	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", productsHandler.AddProduct)
+	postRouter.Use(productsHandler.MiddlewareProductValidation)
 
 	// Similar http ListenAndServe, the method by default
 	// uses an already created object. Here we make the server
