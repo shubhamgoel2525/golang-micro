@@ -34,6 +34,8 @@ func main() {
 
 	postRouter := serveMux.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", productsHandler.AddProduct)
+
+	// Add middleware
 	postRouter.Use(productsHandler.MiddlewareProductValidation)
 
 	// Similar http ListenAndServe, the method by default
