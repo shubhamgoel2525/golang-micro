@@ -13,10 +13,14 @@ import (
 )
 
 func main() {
+	// Custom logger
 	logger := log.New(os.Stdout, "product-api", log.LstdFlags)
 
+	// Create a new instance of Handler (i.e. Handler on which
+	// operations will be run)
 	productsHandler := handlers.NewProducts(logger)
 
+	// Manages requests
 	serveMux := mux.NewRouter()
 
 	// Subrouter registers routes sprcifically for parent

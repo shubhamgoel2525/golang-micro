@@ -23,6 +23,7 @@ func (products *Products) GetProducts(rw http.ResponseWriter, h *http.Request) {
 
 	productsList := data.GetProducts()
 
+	// Encode the products to JSON
 	err := productsList.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
